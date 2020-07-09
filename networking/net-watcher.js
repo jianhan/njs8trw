@@ -2,7 +2,7 @@
 /*
  * @Author: your name
  * @Date: 2020-07-09 18:42:34
- * @LastEditTime: 2020-07-09 20:30:08
+ * @LastEditTime: 2020-07-09 20:56:33
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /njs8trw/networking/net-watcher.js
@@ -17,9 +17,9 @@ if (!filename) {
 
 net.createServer(connection => {
     console.log("Subscriber started")
-    connection.write(`Now watching "${filename}" for change`)
+    connection.write(JSON.stringify({ type: 'watching', file: filename }) + '\n');
 
-    const watcher = fs.watch(filename, d => connection.write(JSON.stringify({ type: 'changed', timestamp: Date.now() }) + '\n'))
+    const watcher = fs.watch(filename, () => connection.write(JSON.stringify({ type: 'changed', timestamp: Date.now() }) + '\n'));
 
     connection.on("close", () => {
         console.log("connection closed")
